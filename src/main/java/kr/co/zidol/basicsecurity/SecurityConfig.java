@@ -5,6 +5,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Configuration
 @EnableWebSecurity
@@ -13,16 +14,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http
-                .authorizeRequests()
-                .anyRequest().authenticated();
-        http
-                .formLogin()
-                .and()
-                .sessionManagement()
-                .maximumSessions(1)//최대 허용 세션 수 : 1
-                .maxSessionsPreventsLogin(false) //세션 초과시 현재 로그인 시도 인증 실패
-        ;
+//        http
+//                .authorizeRequests()
+//                .anyRequest().authenticated();
+//        http
+//                .formLogin()
+//                .and()
+//                .sessionManagement()
+//                .maximumSessions(1)//최대 허용 세션 수 : 1
+//                .maxSessionsPreventsLogin(false) //세션 초과시 현재 로그인 시도 인증 실패
+//        ;
 
 //세션 정책
 /*        http
@@ -34,6 +35,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                SessionCreationPolicy. Stateless	 	:  스프링 시큐리티가 생성하지 않고 존재해도 사용하지 않음
                 .sessionFixation().none();   //changeSessionId : 기본값 Servlet 3.1이상 기본값  .. none , migrateSession: 3.1미만 기봇값, newSession
                 */
+
+        http
+                .formLogin()
+                .and()
+                .authorizeRequests()
+                .anyRequest().authenticated();
+        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+     
 
     }
 }
